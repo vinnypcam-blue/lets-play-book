@@ -182,7 +182,10 @@
         show("classes");
       }
 
-      byId("open-app").href = scheme + "://trainers/" + trainerId;
+      // A private offer rides along, so the app shows it on the trainer's page.
+      var plan = params.get("plan") || "";
+      byId("open-app").href = scheme + "://trainers/" + trainerId +
+        (uuid.test(plan) ? "?plan=" + plan : "");
 
       var hasStore = false;
       if (IOS_STORE_URL) { byId("ios-store").href = IOS_STORE_URL; show("ios-store"); hasStore = true; }
