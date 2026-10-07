@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Book a trainer on Let's Play</title>
+<meta name="description" content="Book a private training session on Let's Play.">
+<meta property="og:title" content="Book a trainer on Let's Play">
+<meta property="og:description" content="Private coaching for adults and kids. Book in a few taps.">
+<meta name="theme-color" content="#0B0818">
+<style>
+  :root {
+    --bg: #0B0818; --card: #14151D; --raised: #1C1D28; --line: rgba(255,255,255,.15);
+    --text: #FFFFFF; --soft: #C8CAD4; --muted: #9698A8;
+    --accent: #7B42FF; --accent-soft: #A98BFF; --gold: #E3BE7A; --mint: #46D6A0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased; }
+  main { max-width: 440px; margin: 0 auto; padding: 20px 20px calc(28px + env(safe-area-inset-bottom)); }
+  .brand { font-size: 15px; font-weight: 800; letter-spacing: -.2px; color: var(--soft); padding: 6px 0 16px; }
+  .poster { border: 1px solid rgba(255,255,255,.28); border-radius: 22px; overflow: hidden;
+    background: linear-gradient(135deg, #8A56FF, #4A1FB8 55%, #150A38); }
+  .photo { position: relative; height: 300px; background: #2A1470 center/cover no-repeat;
+    display: flex; align-items: flex-end; }
+  .photo::after { content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(21,10,56,0) 45%, rgba(21,10,56,.94)); }
+  .initial { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 110px; font-weight: 800; color: rgba(255,255,255,.22); }
+  .who { position: relative; z-index: 1; padding: 16px; }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.8); }
+  h1 { margin: 2px 0 0; font-size: 30px; line-height: 34px; letter-spacing: -.6px; font-weight: 800; overflow-wrap: anywhere; }
+  .facts { padding: 14px 16px 16px; display: grid; gap: 4px; }
+  .sports { font-size: 15px; font-weight: 700; }
+  .price { font-size: 16px; font-weight: 800; color: var(--gold); }
+  .rating, .city { font-size: 13px; color: rgba(255,255,255,.85); }
+  .bio { margin: 16px 2px 0; font-size: 14px; line-height: 21px; color: var(--soft); overflow-wrap: anywhere; }
+  h2 { margin: 22px 2px 10px; font-size: 17px; font-weight: 800; letter-spacing: -.3px; }
+  .class { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 13px 14px;
+    display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 10px; }
+  .class b { display: block; font-size: 15px; overflow-wrap: anywhere; }
+  .class span { font-size: 12px; color: var(--muted); }
+  .class .amount { font-size: 15px; font-weight: 800; color: var(--gold); white-space: nowrap; }
+  .actions { margin-top: 22px; display: grid; gap: 10px; }
+  a.button { display: flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 20px;
+    border-radius: 999px; font-size: 16px; font-weight: 700; text-decoration: none; color: var(--text); }
+  a.primary { border: 1px solid var(--accent); background: linear-gradient(180deg, #2A2B36, #15161D 50%, #0A0B10);
+    box-shadow: 0 6px 18px rgba(123,66,255,.45); }
+  a.secondary { border: 1px solid var(--line); background: var(--raised); }
+  .note { margin: 14px 2px 0; font-size: 12px; line-height: 18px; color: var(--muted); text-align: center; }
+  .state { text-align: center; padding: 80px 12px; }
+  .state h1 { font-size: 22px; line-height: 28px; }
+  .state p { color: var(--muted); font-size: 14px; line-height: 21px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">Let's Play</div>
+
+  <section id="loading" class="state"><p>Loading…</p></section>
+
+  <section id="missing" class="state" hidden>
+    <h1>This trainer isn't taking bookings right now</h1>
+    <p>The link may be out of date. Ask them for a new one, or find a trainer in the Let's Play app.</p>
+  </section>
+
+  <section id="card" hidden>
+    <div class="poster">
+      <div class="photo" id="photo">
+        <div class="initial" id="initial" hidden></div>
+        <div class="who">
+          <div class="eyebrow">Train with</div>
+          <h1 id="name"></h1>
+        </div>
+      </div>
+      <div class="facts">
+        <div class="sports" id="sports"></div>
+        <div class="price" id="price"></div>
+        <div class="rating" id="rating" hidden></div>
+        <div class="city" id="city" hidden></div>
+      </div>
+    </div>
+
+    <p class="bio" id="bio" hidden></p>
+
+    <div id="classes" hidden>
+      <h2>Group classes coming up</h2>
+      <div id="class-list"></div>
+    </div>
+
+    <div class="actions">
+      <a class="button primary" id="open-app" href="#">Book in the Let's Play app</a>
+      <a class="button secondary" id="ios-store" href="#" hidden>Get the app for iPhone</a>
+      <a class="button secondary" id="android-store" href="#" hidden>Get the app for Android</a>
+    </div>
+    <p class="note" id="note"></p>
+  </section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- Settings -----------------------------------------------------------
+  // Where the trainer's public card comes from.
+  var API = "https://jertoudyqehrzwwqfgpq.supabase.co/functions/v1/trainer-link";
+  // Store pages. Leave empty until the app is listed; the buttons stay hidden.
+  var IOS_STORE_URL = "";
+  var ANDROID_STORE_URL = "";
+  // The app's link schemes. "s=dev" / "s=testing" in the address pick the
+  // test builds; anything else opens the real app.
+  var SCHEMES = { dev: "letsplay-dev", testing: "letsplay-testing" };
+  var DEFAULT_SCHEME = "letsplay";
+  // -------------------------------------------------------------------------
+
+  var params = new URLSearchParams(window.location.search);
+  var trainerId = params.get("t") || "";
+  var scheme = SCHEMES[params.get("s")] || DEFAULT_SCHEME;
+  var uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+  function byId(id) { return document.getElementById(id); }
+  function show(id) { byId(id).hidden = false; }
+  function hide(id) { byId(id).hidden = true; }
+
+  function showMissing() { hide("loading"); show("missing"); }
+
+  function money(amount) {
+    var value = Number(amount);
+    return value > 0 ? "$" + (Number.isInteger(value) ? value : value.toFixed(2)) : "Free";
+  }
+
+  function when(iso) {
+    return new Date(iso).toLocaleString(undefined, {
+      weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit"
+    });
+  }
+
+  if (!uuid.test(trainerId)) { showMissing(); return; }
+
+  fetch(API + "?id=" + encodeURIComponent(trainerId))
+    .then(function (response) { return response.ok ? response.json() : null; })
+    .then(function (trainer) {
+      if (!trainer || !trainer.found) { showMissing(); return; }
+
+      // Everything is written with textContent, never as HTML.
+      document.title = "Book " + trainer.name + " on Let's Play";
+      byId("name").textContent = trainer.name;
+      byId("sports").textContent = trainer.sports.length ? trainer.sports.join(", ") : "Private coaching";
+      byId("price").textContent = money(trainer.price) + " / " + trainer.duration_minutes + " min session";
+
+      if (trainer.photo_url && /^https:\/\//.test(trainer.photo_url)) {
+        byId("photo").style.backgroundImage = 'url("' + encodeURI(trainer.photo_url) + '")';
+      } else {
+        byId("initial").textContent = trainer.name.charAt(0).toUpperCase();
+        show("initial");
+      }
+
+      if (trainer.rating) {
+        byId("rating").textContent = "★ " + trainer.rating.toFixed(1) + " (" +
+          (trainer.review_count === 1 ? "1 review" : trainer.review_count + " reviews") + ")";
+        show("rating");
+      }
+
+      if (trainer.city) { byId("city").textContent = trainer.city; show("city"); }
+      if (trainer.bio) { byId("bio").textContent = trainer.bio; show("bio"); }
+
+      if (trainer.classes && trainer.classes.length) {
+        var list = byId("class-list");
+        trainer.classes.forEach(function (item) {
+          var row = document.createElement("div"); row.className = "class";
+          var left = document.createElement("div");
+          var title = document.createElement("b"); title.textContent = item.title;
+          var time = document.createElement("span");
+          time.textContent = when(item.starts_at) + " · " + item.duration_minutes + " min";
+          left.appendChild(title); left.appendChild(time);
+          var amount = document.createElement("div"); amount.className = "amount";
+          amount.textContent = money(item.price);
+          row.appendChild(left); row.appendChild(amount); list.appendChild(row);
+        });
+        show("classes");
+      }
+
+      byId("open-app").href = scheme + "://trainers/" + trainerId;
+
+      var hasStore = false;
+      if (IOS_STORE_URL) { byId("ios-store").href = IOS_STORE_URL; show("ios-store"); hasStore = true; }
+      if (ANDROID_STORE_URL) { byId("android-store").href = ANDROID_STORE_URL; show("android-store"); hasStore = true; }
+
+      byId("note").textContent = hasStore
+        ? "Already have Let's Play? The first button opens " + trainer.name + "'s page in the app. New here? Get the app, then tap this link again."
+        : "Tap the button to open " + trainer.name + "'s page in the Let's Play app. If nothing happens, you don't have the app yet.";
+
+      hide("loading"); show("card");
+    })
+    .catch(showMissing);
+})();
+</script>
+</body>
+</html>
